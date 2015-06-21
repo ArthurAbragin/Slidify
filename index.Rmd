@@ -1,0 +1,99 @@
+---
+title       : Overfitting
+subtitle    : 
+author      : Arthur Abragin
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+Overfitting
+========================================================
+
+
+
+Why is not the most complicated regression model the best?
+Let's create the sample of random data (y=x+sin(x)+random noise),choose the type of the model and try to predict several values which was excluded from the train set.
+We will see that standart error of the predicted values increases as long as the model becomes more complicated. 
+
+R code
+========================================================
+```{r, echo=FALSE}
+sample_size<-100
+x<-(1:sample_size)*10/sample_size
+```
+```{r}
+sample_size<-100
+x<-(1:sample_size)*10/sample_size
+y<-x+sin(x)+rnorm(sample_size,0,0.3)
+```
+```{r, echo=FALSE}
+x2<-x^2
+x3<-x^3
+x4<-x^4
+x5<-x^5
+x6<-x^6
+x7<-x^7
+x8<-x^8
+x9<-x^9
+x10<-x^10
+```
+```{r}
+dat1<-cbind(y,x)
+```
+```{r, echo=FALSE}
+dat2<-cbind(y,x,x2,x3)
+dat3<-cbind(y,x,x2,x3,x4,x5)
+dat4<-cbind(y,x,x2,x3,x4,x5,x6,x7,x8,x9,x10)
+
+samp<-seq(from = 1, to = sample_size, by = 10) 
+dat1_test<-dat1[samp,]
+dat1_train<-dat1[-samp,]
+dat2_test<-dat2[samp,]
+dat2_train<-dat2[-samp,]
+dat3_test<-dat3[samp,]
+dat3_train<-dat3[-samp,]
+dat4_test<-dat4[samp,]
+dat4_train<-dat4[-samp,]
+```
+```{r}
+modelfit1<-lm(y~x,data=as.data.frame(dat1_train))
+```
+```{r, echo=FALSE}
+modelfit2<-lm(y~x+x2+x3,data=as.data.frame(dat2_train))
+modelfit3<-lm(y~x+x2+x3+x4+x5,data=as.data.frame(dat3_train))
+modelfit4<-lm(y~x+x2+x3+x4+x5+x6+x7+x8+x9+x10,data=as.data.frame(dat4_train))
+pred1<-predict(modelfit1,as.data.frame(dat1_test), se.fit = TRUE)
+pred2<-predict(modelfit2,as.data.frame(dat2_test), se.fit = TRUE)
+pred3<-predict(modelfit3,as.data.frame(dat3_test), se.fit = TRUE)
+pred4<-predict(modelfit4,as.data.frame(dat4_test), se.fit = TRUE)
+```
+```{r}
+err1<-sqrt(sum(((dat1_test[,2]-pred1$fit)^2))/10)
+```
+```{r, echo=FALSE}
+err2<-sqrt(sum(((dat2_test[,2]-pred2$fit)^2))/10)
+err3<-sqrt(sum(((dat3_test[,2]-pred3$fit)^2))/10)
+err4<-sqrt(sum(((dat4_test[,2]-pred4$fit)^2))/10)
+```
+
+Results
+========================================================
+Here we can see the difference between standart error of the linear model and(err1) the 10th degree polynomial(err4).
+```{r}
+err1
+err4
+```
+
+Links
+========================================================
+GitHub repository
+https://github.com/ArthurAbragin/DataProduct
+
+Shiny application
+https://arturabragin.shinyapps.io/DataProduct
+

@@ -20,6 +20,9 @@ Why is not the most complicated regression model the best?
 Let's create the sample of random data (y=x+sin(x)+random noise),choose the type of the model and try to predict several values which was excluded from the train set.
 We will see that standart error of the predicted values increases as long as the model becomes more complicated. 
 
+--- .class #id 
+
+
 R code
 ========================================================
 ```{r, echo=FALSE}
@@ -81,6 +84,8 @@ err3<-sqrt(sum(((dat3_test[,2]-pred3$fit)^2))/10)
 err4<-sqrt(sum(((dat4_test[,2]-pred4$fit)^2))/10)
 ```
 
+--- .class #id 
+
 Results
 ========================================================
 Here we can see the difference between standart error of the linear model and(err1) the 10th degree polynomial(err4).
@@ -88,6 +93,8 @@ Here we can see the difference between standart error of the linear model and(er
 err1
 err4
 ```
+
+--- .class #id 
 
 Links
 ========================================================
@@ -97,3 +104,4 @@ https://github.com/ArthurAbragin/DataProduct
 Shiny application
 https://arturabragin.shinyapps.io/DataProduct
 
+--- .class #id 
